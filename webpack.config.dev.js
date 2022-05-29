@@ -1,7 +1,6 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
-
 module.exports = {
     mode: 'development',
     devServer: {
@@ -22,5 +21,17 @@ module.exports = {
             template: 'build/index.html',
             filename: 'index.html'
         })
-    ]
+    ],
+    module: {
+        rules: [
+            {
+                test:/\.css$/,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
+            }
+
+        ]
+    }
 }
