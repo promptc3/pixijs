@@ -15,7 +15,6 @@ html::-webkit-scrollbar {
 canvas {
     position: sticky;
     top: 0px;
-    z-index: 1000;
     height: auto;
 }
 ul {
@@ -25,7 +24,6 @@ ul {
 li {
     height: 50px;
     margin-block: 0px;
-    z-index: -1000;
 }
 /* li:last-child {
     background-color: red;
