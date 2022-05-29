@@ -13,11 +13,23 @@ html::-webkit-scrollbar {
     display: none;
 }
 canvas {
+    position: sticky;
+    top: 0px;
     z-index: 1000;
     height: auto;
+}
+ul {
+    margin-block: 5%;
+    /* background-color: bisque; */
 }
 li {
     height: 50px;
     margin-block: 0px;
     z-index: -1000;
 }
+/* li:last-child {
+    background-color: red;
+}
+li:first-child {
+    background-color: brown;
+} */
