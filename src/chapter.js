@@ -10,6 +10,20 @@ class Chapter {
     this.elementArray = [];
   }
 
+  getFirstTrigger() {
+    return this.name;
+  }
+
+  getTrigger(pageNumber, triggerIndex) {
+    return this.name.concat(
+    "page", pageNumber.toString(),
+    "trigger", triggerIndex.toString());
+  }
+
+  getEndTrigger() {
+    return this.name.concat('end');
+  }
+
   addElements() {
     const element = document.createElement('ul');
     // add a class to that element
@@ -20,15 +34,14 @@ class Chapter {
     for (let index = 0; index < this.pageCount; index++) {
       for (let j = 0; j < this.triggerArray[index]; j++) {
         const childElement = document.createElement('li');
-        childElement.classList.add(this.name.concat(
-        "page", index.toString(), "trigger", j.toString()));
+        childElement.classList.add(this.getTrigger(index, j));
         element.appendChild(childElement);
         this.elementArray.push(childElement);
       }
     }
     // Add end element to handle scene changes
     const endElement = document.createElement('li');
-    endElement.classList.add(this.name.concat('end'));
+    endElement.classList.add(this.getEndTrigger());
     element.appendChild(endElement);
     this.elementArray.push(endElement);
   }
