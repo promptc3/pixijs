@@ -23,12 +23,6 @@ const app = new Application({
 app.renderer.resize(window.innerWidth,window.innerHeight); // added this to resize
 document.body.appendChild(app.view);
 
-// creates and adds trigger to DOM
-// triggerExample: 'chapter1page1trigger1'
-// Chapter(id, pageCount, triggerArray)
-const chapter1 = new Chapter(1, 1, [4])
-chapter1.addElements(); 
-
 // GSAP based animation of sprite
 // directly done on PIXI sprite
 // we can directly use properties of PIXI sprites
@@ -48,53 +42,62 @@ const anim = new Sprite.from(ch1video)
 anim.width = app.screen.width;
 anim.height = app.screen.height;
 
+// creates and adds trigger to DOM
+// triggerExample: 'chapter1page1trigger1'
+// Chapter(id, pageCount, triggerArray)
+const chapter1 = new Chapter(1, 1, [4])
+chapter1.addElements(); 
+
 ScrollTrigger.create({
   trigger: ".chapter1",
-  start: "top 80%",
-  end: "bottom 50%",
+  start: "top 90%",
+  end: "bottom bottom",
   onEnter: self => {
     // add new sprites to the stage
     app.stage.addChild(anim);
   },
-  // markers: true,
+  markers: false,
 });
 
 ScrollTrigger.create({
   trigger: ".chapter1end",
   start: "top 80%",
-  end: "bottom 68%",
+  end: "bottom bottom",
   onEnter: self => {
     // scene change
     // destroy all the previous objects
-    chapter1.removeElements();
+    // chapter1.removeElements();
     app.stage.removeChildren();
     // remove all DOM Elements
     // console.log("progress:", self.progress.toFixed(3), "direction:", self.direction, "velocity", self.getVelocity());
-  }
+  },
+  markers: false
 });
 
 // ------------------------- CHAPTER 2 ----------------------------------- //
 const chapter2 = new Chapter(2, 1, [1]);
 chapter2.addElements();
 const sprite_1_1 = Sprite.from('./assets/1/1_1.png');
-sprite_1_1.position.set(window.innerWidth/2 - 350, window.innerHeight/2 - 250);
+sprite_1_1.position.set(window.innerWidth/2 - 350, window.innerHeight/2 - 330);
 ScrollTrigger.create({
   trigger: ".chapter2",
-  start: "top 80%",
-  end: "bottom 68%",
+  start: "top 90%",
+  end: "bottom bottom",
   onEnter: self => {
     app.stage.addChild(sprite_1_1);
-  }
+  },
+  markers: false
 });
 
 ScrollTrigger.create({
   trigger: ".chapter2end",
   start: "top 80%",
-  end: "bottom 68%",
+  end: "bottom bottom",
   onEnter: self => {
-    chapter2.removeElements();
+    // chapter2.removeElements();
     app.stage.removeChildren();
-  }
+  },
+  markers: false
 });
 
 // ------------------------- CHAPTER 3 ----------------------------------- //
@@ -107,6 +110,7 @@ const sprite_2_1 = Sprite.from('./assets/2/2_1.png');
 sprite_2_1.anchor.set(0.5)
 sprite_2_1.position.set(window.innerWidth - 250, window.innerHeight - 400);
 sprite_2_1.scale.set(0.1)
+sprite_2_1.alpha = 0
 const ch2video = document.createElement('video')
 ch2video.crossOrigin = 'anonymous'
 ch2video.preload = ''
@@ -124,12 +128,11 @@ const chapter3 = new Chapter(3, 1, [2])
 chapter3.addElements(); 
 ScrollTrigger.create({
   trigger: ".chapter3",
-  start: "top 80%",
-  end: "bottom 50%",
+  start: "top center",
+  end: "bottom center",
   onEnter: self => {
     // add new sprites to the stage
-    app.stage.addChild(sprite_2_2);
-    app.stage.addChild(anim2);
+    app.stage.addChild(sprite_2_2, sprite_2_1, anim2);
     app.loader.load((loader, resources) => {
       const image = resources.bird.animation;
       image.scale.set(0.07);
@@ -141,9 +144,9 @@ ScrollTrigger.create({
 
 gsap.to(sprite_2_1, {
 	scrollTrigger: {
-		trigger: ".chapter3page0trigger1",
-		start: "top 82%",
-    end: "bottom 70%",
+		trigger: ".chapter3page0trigger0",
+		start: "top center",
+    end: "bottom bottom",
 		markers: false // markers enabled for debugging
 	},
   duration: 5,
@@ -152,10 +155,10 @@ gsap.to(sprite_2_1, {
 
 ScrollTrigger.create({
   trigger: ".chapter3end",
-  start: "top 80%",
-  end: "bottom 50%",
+  start: "top center",
+  end: "bottom bottom",
   onEnter: self => {
-    chapter3.removeElements();
+    // chapter3.removeElements();
     app.stage.removeChildren();
   },
 });
@@ -166,28 +169,28 @@ chapter4.addElements();
 
 const sprite_3_4 = Sprite.from('./assets/3/3_4.png');
 sprite_3_4.anchor.set(0.5)
-sprite_3_4.position.set(window.innerWidth - 250, window.innerHeight - 400);
-sprite_3_4.scale.set(0.1)
+sprite_3_4.position.set(window.innerWidth - 750, window.innerHeight - 300);
+sprite_3_4.scale.set(0.2)
 const sprite_3_1 = Sprite.from('./assets/3/3_1.png');
 sprite_3_1.anchor.set(0.5)
-sprite_3_1.position.set(window.innerWidth - 250, window.innerHeight - 400);
-sprite_3_1.scale.set(0.1)
+sprite_3_1.position.set(window.innerWidth - 760, window.innerHeight - 200);
+sprite_3_1.scale.set(0.2)
 sprite_3_1.alpha = 0
 ScrollTrigger.create({
   trigger: ".chapter4",
-  start: "top 80%",
-  end: "bottom 50%",
+  start: "top center",
+  end: "bottom bottom",
   onEnter: self => {
-    app.stage.addChild(sprite_3_1);
+    app.stage.addChild(sprite_3_4, sprite_3_1);
   },
 });
 
 gsap.to(sprite_3_1, {
 	scrollTrigger: {
 		trigger: ".chapter4page0trigger1",
-		start: "top 82%",
-    end: "bottom 70%",
-		markers: false // markers enabled for debugging
+		start: "top 90%",
+    end: "bottom bottom",
+    markers: true,
 	},
   duration: 5,
   alpha: 1.0
