@@ -1,6 +1,6 @@
 // import * as Pixi from "pixi.js";
 import "./style.css";
-import { Application } from "pixi.js";
+import { Application, Spritesheet } from "pixi.js";
 import { Sprite } from "pixi.js";
 import { Texture } from "pixi.js";
 import { Graphics } from "pixi.js";
@@ -22,7 +22,50 @@ const app = new Application({
 
 app.renderer.resize(window.innerWidth,window.innerHeight); // added this to resize
 document.body.appendChild(app.view);
-
+// Loader
+// create an empty sprite object to store all the sprites
+const sprites = {};
+const loader = new Loader();
+loader.baseUrl = "assets";
+loader.add("sprite_1_1", "1/1_1.png")
+      .add("sprite_1_2", "1/1_2.png")
+      .add("sprite_1_3", "1/1_3.png")
+      .add("sprite_1_4", "1/1_4.png")
+      .add("sprite_2_1", "2/2_1.png")
+      .add("sprite_2_2", "2/2_2.png")
+      .add("sprite_2_3", "2/2_3.png")
+      .add("sprite_2_4", "2/2_4.png")
+      .add("sprite_3_1", "3/3_1.png")
+      .add("sprite_3_4", "3/3_4.png")
+      .add("bird", "2/Animations/Turn.gif");
+loader.load((loader, resources) => {
+  sprites.sprite_1_1 = new Sprite.from(resources.sprite_1_1.texture);
+  sprites.sprite_1_2 = new Sprite.from(resources.sprite_1_2.texture);
+  sprites.sprite_1_3 = new Sprite.from(resources.sprite_1_3.texture);
+  sprites.sprite_1_4 = new Sprite.from(resources.sprite_1_4.texture);
+  sprites.sprite_2_1 = new Sprite.from(resources.sprite_2_1.texture);
+  sprites.sprite_2_2 = new Sprite.from(resources.sprite_2_2.texture);
+  sprites.sprite_2_3 = new Sprite.from(resources.sprite_2_3.texture);
+  sprites.sprite_3_1 = new Sprite.from(resources.sprite_3_1.texture);
+  sprites.sprite_3_4 = new Sprite.from(resources.sprite_3_4.texture);
+  sprites.sprite_2_2.anchor.set(0.5)
+  sprites.sprite_2_2.position.set(window.innerWidth - 950, window.innerHeight - 400);
+  sprites.sprite_2_2.scale.set(0.1)
+  sprites.sprite_2_1.anchor.set(0.5)
+  sprites.sprite_2_1.position.set(window.innerWidth - 250, window.innerHeight - 400);
+  sprites.sprite_2_1.scale.set(0.1)
+  sprites.sprite_2_1.alpha = 0
+  sprite_3_4.anchor.set(0.5)
+  sprite_3_4.position.set(window.innerWidth - 750, window.innerHeight - 300);
+  sprite_3_4.scale.set(0.2)
+  sprite_3_1.anchor.set(0.5)
+  sprite_3_1.position.set(window.innerWidth - 760, window.innerHeight - 200);
+  sprite_3_1.scale.set(0.2)
+  sprite_3_1.alpha = 0
+  sprites.birdTurn = resources.bird.animation;
+  birdTurn.scale.set(0.07);
+  birdTurn.position.set(window.innerWidth - 920, window.innerHeight - 430);
+})
 // GSAP based animation of sprite
 // directly done on PIXI sprite
 // we can directly use properties of PIXI sprites
@@ -77,14 +120,13 @@ ScrollTrigger.create({
 // ------------------------- CHAPTER 2 ----------------------------------- //
 const chapter2 = new Chapter(2, 1, [1]);
 chapter2.addElements();
-const sprite_1_1 = Sprite.from('./assets/1/1_1.png');
-sprite_1_1.position.set(window.innerWidth/2 - 350, window.innerHeight/2 - 330);
 ScrollTrigger.create({
   trigger: ".chapter2",
   start: "top 90%",
   end: "bottom bottom",
   onEnter: self => {
-    app.stage.addChild(sprite_1_1);
+    sprites.sprite_1_1.position.set(window.innerWidth/2 - 350, window.innerHeight/2 - 330);
+    app.stage.addChild(sprites.sprite_1_1);
   },
   markers: false
 });
@@ -102,15 +144,6 @@ ScrollTrigger.create({
 
 // ------------------------- CHAPTER 3 ----------------------------------- //
 // Load sprites and videos for chapter 3
-const sprite_2_2 = Sprite.from('./assets/2/2_2.png');
-sprite_2_2.anchor.set(0.5)
-sprite_2_2.position.set(window.innerWidth - 950, window.innerHeight - 400);
-sprite_2_2.scale.set(0.1)
-const sprite_2_1 = Sprite.from('./assets/2/2_1.png');
-sprite_2_1.anchor.set(0.5)
-sprite_2_1.position.set(window.innerWidth - 250, window.innerHeight - 400);
-sprite_2_1.scale.set(0.1)
-sprite_2_1.alpha = 0
 const ch2video = document.createElement('video')
 ch2video.crossOrigin = 'anonymous'
 ch2video.preload = ''
@@ -122,7 +155,6 @@ ch2video.loop = true
 const anim2 = new Sprite.from(ch2video)
 anim2.position.set(window.innerWidth - 500, window.innerHeight - 550);
 anim2.scale.set(0.3)
-app.loader.add('bird', './assets/2/Animations/Turn.gif');
 
 const chapter3 = new Chapter(3, 1, [2])
 chapter3.addElements(); 
@@ -132,17 +164,12 @@ ScrollTrigger.create({
   end: "bottom center",
   onEnter: self => {
     // add new sprites to the stage
-    app.stage.addChild(sprite_2_2, sprite_2_1, anim2);
-    app.loader.load((loader, resources) => {
-      const image = resources.bird.animation;
-      image.scale.set(0.07);
-      image.position.set(window.innerWidth - 920, window.innerHeight - 430);
-      app.stage.addChild(image);
-    });
+    app.stage.addChild(sprites.sprite_2_2, sprites.sprite_2_1,
+      anim2, sprites.birdTurn);
   },
 });
 
-gsap.to(sprite_2_1, {
+gsap.to(sprites.sprite_2_1, {
 	scrollTrigger: {
 		trigger: ".chapter3page0trigger0",
 		start: "top center",
@@ -167,25 +194,16 @@ ScrollTrigger.create({
 const chapter4 = new Chapter(4, 1, [4]);
 chapter4.addElements();
 
-const sprite_3_4 = Sprite.from('./assets/3/3_4.png');
-sprite_3_4.anchor.set(0.5)
-sprite_3_4.position.set(window.innerWidth - 750, window.innerHeight - 300);
-sprite_3_4.scale.set(0.2)
-const sprite_3_1 = Sprite.from('./assets/3/3_1.png');
-sprite_3_1.anchor.set(0.5)
-sprite_3_1.position.set(window.innerWidth - 760, window.innerHeight - 200);
-sprite_3_1.scale.set(0.2)
-sprite_3_1.alpha = 0
 ScrollTrigger.create({
   trigger: ".chapter4",
   start: "top center",
   end: "bottom bottom",
   onEnter: self => {
-    app.stage.addChild(sprite_3_4, sprite_3_1);
+    app.stage.addChild(sprites.sprite_3_4, sprites.sprite_3_1);
   },
 });
 
-gsap.to(sprite_3_1, {
+gsap.to(sprites.sprite_3_1, {
 	scrollTrigger: {
 		trigger: ".chapter4page0trigger1",
 		start: "top 90%",
